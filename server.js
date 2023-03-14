@@ -7,6 +7,8 @@ const PORT = process.env.PORT || 3500;
 
 const app = express();
 
+app.name = 'backend-test';
+
 app.use(bodyParser.urlencoded({ extended: true, limit: '50mb'}));
 app.use(bodyParser.json({limit: '50mb'}));
 app.use(cookieParser());
