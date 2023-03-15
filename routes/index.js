@@ -4,7 +4,7 @@ const sizeRouter = require('./sizes/sizes.js');
 
 const router = Router();
 
-router.use('/sizes', sizeRouter);
+router.use('/', sizeRouter);
 
 
 module.exports = router;
