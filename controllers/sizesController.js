@@ -3,13 +3,13 @@ const getSizes = (req, res) => {
     try {
         const groupsArr = groups.split(",").map((num) => {
             return Number(num);
-        })
+        });
         
         let sumaDePasajeros = 0;
         groupsArr.forEach(function (a) { sumaDePasajeros += a; });
 
         let grupoMinimo = 0;
-        groupsArr.forEach(function (a) { if (a > grupoMinimo) grupoMinimo = a })
+        groupsArr.forEach(function (a) { if (a > grupoMinimo) grupoMinimo = a });
 
         const sizes = [];
         for (let i = grupoMinimo; i <= sumaDePasajeros; i++) {
@@ -24,11 +24,11 @@ const getSizes = (req, res) => {
                 if (acumulador === 0) acumulador = i;
             }
             if (aux === true) {
-                sizes.push(i)
+                sizes.push(i);
             }
         }
         let sizesString = sizes.join();
-        res.status(200).json({ "sizes": sizesString })
+        res.status(200).json({ "sizes": sizesString });
     } catch (error) {
         res.status(500).json({ "message": error });
     }
