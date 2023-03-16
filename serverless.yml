@@ -4,13 +4,18 @@ frameworkVersion: '3'
 provider:
   name: aws
   runtime: nodejs18.x
-  lambdaHashingVersion: '20231503'
   region: us-west-2
 
 functions:
   api:
-    handler: index.handler
+    handler: src/index.handler
     events:
       - httpApi:
           path: /
           method: get
+  getSize1:
+    handler: src/controllers/sizesController.getSizes
+    events:
+      - httpApi:
+          path: /solution1
+          method: post

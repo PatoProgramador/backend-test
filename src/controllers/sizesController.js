@@ -1,5 +1,8 @@
-const getSizes = (req, res) => {
-    const { groups } = req.body;
+const middy = require("@middy/core");
+const jsonBodyParser = require("@middy/http-json-body-parser");
+
+const getSizes = (event) => {
+    const { groups } = event.body;
     try {
         const groupsArr = groups.split(",").map((num) => {
             return Number(num);
@@ -28,10 +31,16 @@ const getSizes = (req, res) => {
             }
         }
         sizes = sizes.join();
-        res.status(200).json({ "sizes": sizes });
+        return {
+            statusCode: 200,
+            body: JSON.stringify({"sizes": sizes})
+        };
     } catch (error) {
-        res.status(500).json({ "message": error });
+        return {
+            statusCode: 500,
+            body: JSON.stringify({"Error": error})
+        };
     }
 };
 
-module.exports = { getSizes };
+module.exports = { getSizes: middy(getSizes).use(jsonBodyParser()) };
