@@ -1,12 +1,18 @@
-const getSizes2 = (req, res) => {
-    const { groups } = req.body;
+const middy = require("@middy/core");
+const urlencodeParser = require("@middy/http-urlencode-body-parser");
+const jsonBodyParser = require("@middy/http-json-body-parser");
+const multiparDataParser = require("@middy/http-multipart-body-parser");
+
+const getSizes2 = (event) => {
+    if(!event.body || event.body === null || event.body === "") return {
+        statusCode: 400,
+        body: JSON.stringify({"Error": "Debes pasar los grupos a evaluar"})
+    };
+    const { groups } = event.body;
     try {
         const groupsArr = groups.split(",").map((num) => {
             return Number(num);
         });
-
-        let sumaDePasajeros = 0;
-        groupsArr.forEach(function (a) { sumaDePasajeros += a; });
 
         let grupoMinimo = 0;
         groupsArr.forEach(function (a) { if (a > grupoMinimo) grupoMinimo = a });
@@ -43,10 +49,21 @@ const getSizes2 = (req, res) => {
             }
         })
         sizes = sizes.join();
-        res.status(200).json( {"sizes": sizes} );
+        return {
+            statusCode: 200,
+            body: JSON.stringify({"sizes": sizes})
+        };
     } catch (error) {
-        res.status(500).json({ "message": error });
+        return {
+            statusCode: 500,
+            body: JSON.stringify({"Error": error})
+        };
     }
 };
 
-module.exports = { getSizes2 };
+module.exports = { 
+    getSizes2: middy(getSizes2)
+        .use(jsonBodyParser())
+        .use(urlencodeParser())
+        .use(multiparDataParser())
+};

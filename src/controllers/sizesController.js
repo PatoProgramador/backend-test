@@ -1,7 +1,13 @@
 const middy = require("@middy/core");
+const urlencodeParser = require("@middy/http-urlencode-body-parser");
 const jsonBodyParser = require("@middy/http-json-body-parser");
+const multiparDataParser = require("@middy/http-multipart-body-parser");
 
 const getSizes = (event) => {
+    if(!event.body || event.body === null || event.body === "") return {
+        statusCode: 400,
+        body: JSON.stringify({"Error": "Debes pasar los grupos a evaluar"})
+    };
     const { groups } = event.body;
     try {
         const groupsArr = groups.split(",").map((num) => {
@@ -43,4 +49,9 @@ const getSizes = (event) => {
     }
 };
 
-module.exports = { getSizes: middy(getSizes).use(jsonBodyParser()) };
+module.exports = { 
+    getSizes: middy(getSizes)
+        .use(jsonBodyParser())
+        .use(urlencodeParser())
+        .use(multiparDataParser())
+};

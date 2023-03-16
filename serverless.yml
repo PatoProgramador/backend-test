@@ -19,3 +19,9 @@ functions:
       - httpApi:
           path: /solution1
           method: post
+  getSize2:
+    handler: src/controllers/sizesController2.getSizes2
+    events:
+      - httpApi:
+          path: /solution2
+          method: post
