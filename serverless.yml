@@ -1,14 +1,16 @@
-service: backend-test
+service: aws-lambda-rest-api
+frameworkVersion: '3'
 
 provider:
   name: aws
-  runtime: nodejs12.x
-  region: us-west-1
+  runtime: nodejs18.x
+  lambdaHashingVersion: '20231503'
+  region: us-west-2
 
 functions:
-  hello:
-    handler: handler.hello
+  api:
+    handler: index.handler
     events:
-      - http:
-          path: /hello
+      - httpApi:
+          path: /
           method: get
